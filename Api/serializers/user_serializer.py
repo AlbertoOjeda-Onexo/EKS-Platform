@@ -1,6 +1,7 @@
 from datetime import datetime
 from Api.models.user_model import User
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 from rest_framework_simplejwt.tokens import AccessToken, TokenError, RefreshToken, UntypedToken
 
 class UserSerializer(serializers.ModelSerializer):
@@ -61,7 +62,7 @@ class LoginSerializer(serializers.Serializer):
                 'user': user_serializer.data,
             }             
             return response_data
-        raise serializers.ValidationError("Credenciales incorrectas")  
+        raise ValidationError({"code":"Error de Autenticación","detail":"Credenciales incorrectas. Verifique usuario y contraseña."})  
 
 class TokenValidatorSerializer(serializers.Serializer):
     token = serializers.CharField()
