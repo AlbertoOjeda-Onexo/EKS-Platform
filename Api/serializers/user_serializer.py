@@ -1,20 +1,20 @@
 from datetime import datetime
 from Api.models.user_model import User
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import AccessToken, TokenError, RefreshToken
+from rest_framework_simplejwt.tokens import AccessToken, TokenError, RefreshToken, UntypedToken
 
 class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('idUser','userName', 'email', 'userRol', 'is_active')
+        fields = ('idUser','userName', 'email', 'is_active')
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ('userName', 'userRol', 'email', 'password')
+        fields = ('userName', 'email', 'password')
     
     def validate_password(self, value):
         if len(value) < 8:
@@ -27,8 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         if request_user.is_authenticated:
             user = User.objects.create_user(
-                userName=validated_data['userName'],
-                userRol=validated_data['userRol'],
+                userName=validated_data['userName'],                
                 email=validated_data['email'],
                 password=validated_data['password'],
                 cbu=request_user.id,
@@ -36,8 +35,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
         else:
             user = User.objects.create_user(
-                userName=validated_data['userName'],
-                userRol=validated_data['userRol'],
+                userName=validated_data['userName'],                
                 email=validated_data['email'],
                 password=validated_data['password'],
                 cbu=None,
@@ -71,8 +69,11 @@ class TokenValidatorSerializer(serializers.Serializer):
     def validate(self, data):
         token = data['token']
         try:
-            access_token = AccessToken(token)
+            UntypedToken(token) 
+
+            access_token = UntypedToken(token)
             user_id = access_token['user_id']
+
             user = User.objects.filter(idUser=user_id).first()
             if user:
                 return {
