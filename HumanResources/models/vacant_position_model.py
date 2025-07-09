@@ -30,7 +30,6 @@ class VacantPosition(models.Model):
     def __str__(self):
         return self.titulo
 
-
 class CustomField(models.Model):
     idCustomField = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)

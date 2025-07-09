@@ -119,6 +119,12 @@ class CustomFieldDeleteSerializer(serializers.ModelSerializer):
         model = CustomField
         fields = ['fdl']
 
+class VacantPositionDeleteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VacantPosition
+        fields = ['fdl']
+
 
 
 
