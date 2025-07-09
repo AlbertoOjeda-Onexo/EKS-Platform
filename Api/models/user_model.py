@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from .permission_model import CustomPermission
 from django.db import models
 
 class UserManager(BaseUserManager):
@@ -22,6 +23,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     idUser = models.AutoField(primary_key=True, unique=True)
     userName = models.CharField(max_length=50, unique=True)
     userRol = models.CharField(max_length=100, default='User')
+    permissions = models.ManyToManyField(CustomPermission, blank=True)
     email = models.EmailField(max_length=255, unique=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)

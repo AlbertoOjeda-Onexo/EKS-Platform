@@ -55,14 +55,22 @@ class LoginSerializer(serializers.Serializer):
         user = User.objects.filter(userName=userName).first()
         if user and user.check_password(password):
             refresh = RefreshToken.for_user(user)
-            user_serializer = UserSerializer(user)    
-            response_data= {
+            user_serializer = UserSerializer(user)
+            
+            permisos = list(user.permissions.values_list("code", flat=True))
+
+            response_data = {
                 'refresh_token': str(refresh),
                 'access_token': str(refresh.access_token),
                 'user': user_serializer.data,
-            }             
+                'permissions': permisos
+            }
             return response_data
-        raise ValidationError({"code":"Error de Autenticación","detail":"Credenciales incorrectas. Verifique usuario y contraseña."})  
+
+        raise ValidationError({
+            "code": "Error de Autenticación",
+            "detail": "Credenciales incorrectas. Verifique usuario y contraseña."
+        })
 
 class TokenValidatorSerializer(serializers.Serializer):
     token = serializers.CharField()
