@@ -1,0 +1,2 @@
+from .candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
+from .vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition

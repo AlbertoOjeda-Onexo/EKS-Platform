@@ -3,20 +3,20 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from ..models.vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
+from ..models.candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
 
 class CustomFieldSerializer(serializers.ModelSerializer):
     class Meta:
-        model = CustomFieldVacantPosition
+        model = CustomFieldCandidate
         fields = '__all__'
 
 class CustomFieldValueSerializer(serializers.ModelSerializer):
-    field = serializers.PrimaryKeyRelatedField(queryset=CustomFieldVacantPosition.objects.all(), write_only=True)    
+    field = serializers.PrimaryKeyRelatedField(queryset=CustomFieldCandidate.objects.all(), write_only=True)    
     fieldID = serializers.IntegerField(source='field.idCustomField', read_only=True)
     fieldName = serializers.CharField(source='field.label', read_only=True)    
     
     class Meta:
-        model = CustomFieldValueVacantPosition
+        model = CustomFieldValueCandidate
         fields = ['field', 'fieldID', 'fieldName', 'value']
     
     def validate(self, data):
@@ -58,19 +58,19 @@ class CustomFieldValueSerializer(serializers.ModelSerializer):
         
         return data
 
-class VacantPositionSerializer(serializers.ModelSerializer):
+class CandidateSerializer(serializers.ModelSerializer):
     valores_dinamicos = CustomFieldValueSerializer(many=True)
     
     class Meta:
-        model = VacantPosition
-        fields = ['idVacantPosition', 'title', 'description', 'expire_date', 'status', 'valores_dinamicos']
+        model = Candidate
+        fields = ['idCandidate', 'title', 'name', 'firstSurName',  'secondSurName', 'status', 'valores_dinamicos']
         extra_kwargs = {
-            'status': {'error_messages': {'invalid_choice': 'El status debe ser: pendiente, aprobada o cerrada'}}
+            'status': {'error_messages': {'invalid_choice': 'El status debe ser: pendiente, aprobado o rechazado'}}
         }
 
     def validate_status(self, value):
-        from ..models.vacant_position_model import VACANT_STATUS
-        valid_statuses = [choice[0] for choice in VACANT_STATUS]        
+        from ..models.candidate_model import CANDIDATE_STATUS
+        valid_statuses = [choice[0] for choice in CANDIDATE_STATUS]        
         if value not in valid_statuses:
             raise serializers.ValidationError({
                 "code": "Status Invalido",
@@ -79,7 +79,7 @@ class VacantPositionSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):        
-        required_fields = CustomFieldVacantPosition.objects.filter(required=True, fdl=0)
+        required_fields = CustomFieldCandidate.objects.filter(required=True, fdl=0)
         submitted_fields = {v['field'].name for v in data.get('valores_dinamicos', [])}
         
         missing_fields = []
@@ -100,29 +100,29 @@ class VacantPositionSerializer(serializers.ModelSerializer):
 
         validated_data['cbu'] = request_user.idUser
         valores_dinamicos_data = validated_data.pop('valores_dinamicos')
-        vacante = VacantPosition.objects.create(**validated_data)
+        candidato = Candidate.objects.create(**validated_data)
         
         for valor_data in valores_dinamicos_data:
             field = valor_data['field']
-            CustomFieldValueVacantPosition.objects.create(
-                idVacantPosition=vacante,
+            CustomFieldValueCandidate.objects.create(
+                idCandidate=candidato,
                 field=field,
                 value=valor_data['value'],
                 cbu = request_user.idUser
             )
         
-        return vacante
+        return candidato
     
 class CustomFieldDeleteSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = CustomFieldVacantPosition
+        model = CustomFieldCandidate
         fields = ['fdl']
 
-class VacantPositionDeleteSerializer(serializers.ModelSerializer):
+class CandidateDeleteSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = VacantPosition
+        model = Candidate
         fields = ['fdl']
 
 

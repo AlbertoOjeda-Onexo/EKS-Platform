@@ -4,11 +4,11 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from Api.models.permission_model import HasCustomPermission
-from ..models.vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
-from ..serializers.vacant_position_serializer import VacantPositionSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, VacantPositionDeleteSerializer
+from ..models.candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
+from ..serializers.candidate_serializer import CandidateSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, CandidateDeleteSerializer
 
 class CustomFieldListCreateView(generics.ListCreateAPIView):    
-    queryset = CustomFieldVacantPosition.objects.filter(fdl=0)
+    queryset = CustomFieldCandidate.objects.filter(fdl=0)
     serializer_class = CustomFieldSerializer
 
     def get_permissions(self):
@@ -18,21 +18,21 @@ class CustomFieldListCreateView(generics.ListCreateAPIView):
     
     required_permission = "crear_campo_dinamico"
 
-class VacantPositionListCreateView(generics.ListCreateAPIView):    
-    queryset = VacantPosition.objects.filter(fdl=0)
-    serializer_class = VacantPositionSerializer
+class CandidateListCreateView(generics.ListCreateAPIView):    
+    queryset = Candidate.objects.filter(fdl=0)
+    serializer_class = CandidateSerializer
 
     def get_permissions(self):
         if self.request.method == "POST":            
             return [IsAuthenticated(), HasCustomPermission()]
         return [IsAuthenticated()]  
 
-    required_permission = "crear_vacante"
+    required_permission = "crear_candidato"
 
 class CustomFieldDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
     required_permission = 'borrar_campo_dinamico'
-    queryset = CustomFieldVacantPosition.objects.all()
+    queryset = CustomFieldCandidate.objects.all()
     serializer_class = CustomFieldDeleteSerializer  
 
     def perform_destroy(self, instance):
@@ -48,11 +48,11 @@ class CustomFieldDeleteView(generics.DestroyAPIView):
             "detail": "El campo personalizado se ha eliminado exitosamente."
         }, status=status.HTTP_204_NO_CONTENT)
     
-class VacantPositionDeleteView(generics.DestroyAPIView):
+class CandidateDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
-    required_permission = 'eliminar_vacante'    
-    queryset = VacantPosition.objects.all()
-    serializer_class = VacantPositionDeleteSerializer  
+    required_permission = 'eliminar_candidato'    
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateDeleteSerializer  
 
     def perform_destroy(self, instance):
         request_user = self.request.user
@@ -63,26 +63,26 @@ class VacantPositionDeleteView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):        
         self.perform_destroy(self.get_object())
         return Response({
-            "code": "Vacante eliminada",
-            "detail": "La vacante se ha eliminado exitosamente."
+            "code": "Candidato eliminado",
+            "detail": "El candidato se ha eliminado exitosamente."
         }, status=status.HTTP_204_NO_CONTENT)
     
-class VacantPositionApproveView(generics.UpdateAPIView):
+class CandidateApproveView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
-    required_permission = 'aprobar_vacante'
+    required_permission = 'aprobar_candidato'
 
-    queryset = VacantPosition.objects.all()
-    serializer_class = VacantPositionDeleteSerializer  
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateDeleteSerializer  
 
     def perform_update(self, instance):
         request_user = self.request.user
-        instance.status = 'aprobada'
+        instance.status = 'aprobado'
         instance.luu = request_user.idUser
         instance.save()
 
     def patch(self, request, *args, **kwargs):        
         self.perform_update(self.get_object())
         return Response({
-            "code": "Vacante aprovada.",
-            "detail": "La vacante ha sido aprovada exitosamente."
+            "code": "Candidato aprovado.",
+            "detail": "El candidato ha sido aprovado exitosamente."
         }, status=status.HTTP_204_NO_CONTENT)
