@@ -1,2 +1,3 @@
 from .candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
 from .vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
+from .vacant_position_checklist_model import VacantPositionChecklist

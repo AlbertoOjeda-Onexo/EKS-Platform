@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from ..models.vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
+from ..serializers.vacant_position_checklist_serializer import VacantPositionCheckListSerializer
 
 class CustomFieldSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,10 +61,11 @@ class CustomFieldValueSerializer(serializers.ModelSerializer):
 
 class VacantPositionSerializer(serializers.ModelSerializer):
     valores_dinamicos = CustomFieldValueSerializer(many=True)
+    checklist = VacantPositionCheckListSerializer(many=True)
     
     class Meta:
         model = VacantPosition
-        fields = ['idVacantPosition', 'title', 'description', 'expire_date', 'status', 'valores_dinamicos']
+        fields = ['idVacantPosition', 'title', 'description', 'expire_date', 'status', 'valores_dinamicos', 'checklist']
         extra_kwargs = {
             'status': {'error_messages': {'invalid_choice': 'El status debe ser: pendiente, aprobada o cerrada'}}
         }

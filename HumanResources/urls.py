@@ -1,6 +1,7 @@
 from django.urls import path
 from .views.vacant_position_view import CustomFieldVacantPositionListCreateView, VacantPositionListCreateView, CustomFieldVacantPositionDeleteView, VacantPositionDeleteView, VacantPositionApproveView
 from .views.candidate_view import CustomFieldCandidateListCreateView, CandidateListCreateView, CustomFieldCandidateDeleteView, CandidateDeleteView, CandidateApproveView
+from .views.vacant_position_checklist_view import VacantPositionCheckListCreateView, VacantPositionCheckDeleteView 
 from .views.vacant_position_agent_view import publish_vacant_description
 
 urlpatterns = [
@@ -10,6 +11,9 @@ urlpatterns = [
     path("vacant_position/", VacantPositionListCreateView.as_view(), name="vacantes"),
     path("vacant_position/<int:pk>/delete/", VacantPositionDeleteView.as_view(), name="vacante_delete"),
     path("vacant_position/<int:pk>/approve/", VacantPositionApproveView.as_view(), name="vacante_approve"),
+    # Checklist
+    path("vacant_position/checklist/", VacantPositionCheckListCreateView.as_view(), name="vacante_checklist"),
+    path("vacant_position/checklist/<int:pk>/delete/", VacantPositionCheckDeleteView.as_view(), name="vacante_checklist_delete"),
     # Candidatos
     path("candidate/custom_fields/", CustomFieldCandidateListCreateView.as_view(), name="campos"),
     path("candidate/custom_fields/<int:pk>/delete/", CustomFieldCandidateDeleteView.as_view(), name="campo_delete"),
