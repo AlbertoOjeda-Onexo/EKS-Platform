@@ -69,7 +69,7 @@ class CandidateDeleteView(generics.DestroyAPIView):
     
 class CandidateApproveView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
-    required_permission = 'aprobar_candidato'
+    required_permission = 'aceptar_candidato'
 
     queryset = Candidate.objects.all()
     serializer_class = CandidateDeleteSerializer  
