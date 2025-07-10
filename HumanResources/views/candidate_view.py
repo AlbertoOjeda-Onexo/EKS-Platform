@@ -7,7 +7,7 @@ from Api.models.permission_model import HasCustomPermission
 from ..models.candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
 from ..serializers.candidate_serializer import CandidateSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, CandidateDeleteSerializer
 
-class CustomFieldListCreateView(generics.ListCreateAPIView):    
+class CustomFieldCandidateListCreateView(generics.ListCreateAPIView):    
     queryset = CustomFieldCandidate.objects.filter(fdl=0)
     serializer_class = CustomFieldSerializer
 
@@ -29,7 +29,7 @@ class CandidateListCreateView(generics.ListCreateAPIView):
 
     required_permission = "crear_candidato"
 
-class CustomFieldDeleteView(generics.DestroyAPIView):
+class CustomFieldCandidateDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
     required_permission = 'borrar_campo_dinamico'
     queryset = CustomFieldCandidate.objects.all()

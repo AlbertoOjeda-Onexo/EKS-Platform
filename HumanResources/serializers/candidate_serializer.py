@@ -60,13 +60,22 @@ class CustomFieldValueSerializer(serializers.ModelSerializer):
 
 class CandidateSerializer(serializers.ModelSerializer):
     valores_dinamicos = CustomFieldValueSerializer(many=True)
+    vacantPositionTitle = serializers.CharField(source='idVacantPosition.title', read_only=True)
     
     class Meta:
         model = Candidate
-        fields = ['idCandidate', 'title', 'name', 'firstSurName',  'secondSurName', 'status', 'valores_dinamicos']
+        fields = ['idCandidate', 'idVacantPosition','vacantPositionTitle', 'name', 'firstSurName',  'secondSurName', 'status', 'valores_dinamicos']
         extra_kwargs = {
             'status': {'error_messages': {'invalid_choice': 'El status debe ser: pendiente, aprobado o rechazado'}}
         }
+
+    def validate_idVacantPosition(self, value):
+        if value.fdl == '1' or value.fdl == 1:
+            raise serializers.ValidationError({
+                "code": "Vacante Invalida",
+                "detail": "La vacante seleccionada ya no se encuentra disponible."
+            })
+        return value
 
     def validate_status(self, value):
         from ..models.candidate_model import CANDIDATE_STATUS

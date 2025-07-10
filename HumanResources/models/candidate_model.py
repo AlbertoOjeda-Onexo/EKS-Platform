@@ -1,4 +1,5 @@
 from django.db import models
+from ..models.vacant_position_model import VacantPosition
 
 TIPOS_CAMPO = (
     ("text", "Texto"),
@@ -16,6 +17,7 @@ CANDIDATE_STATUS = (
 
 class Candidate(models.Model):
     idCandidate = models.AutoField(primary_key=True)
+    idVacantPosition = models.ForeignKey(VacantPosition, on_delete=models.CASCADE, null=False)
     name = models.CharField(max_length=255)
     firstSurName = models.CharField(max_length=255)
     secondSurName = models.CharField(max_length=255)

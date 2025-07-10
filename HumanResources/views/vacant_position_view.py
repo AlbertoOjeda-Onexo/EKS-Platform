@@ -7,7 +7,7 @@ from Api.models.permission_model import HasCustomPermission
 from ..models.vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
 from ..serializers.vacant_position_serializer import VacantPositionSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, VacantPositionDeleteSerializer
 
-class CustomFieldListCreateView(generics.ListCreateAPIView):    
+class CustomFieldVacantPositionListCreateView(generics.ListCreateAPIView):    
     queryset = CustomFieldVacantPosition.objects.filter(fdl=0)
     serializer_class = CustomFieldSerializer
 
@@ -29,7 +29,7 @@ class VacantPositionListCreateView(generics.ListCreateAPIView):
 
     required_permission = "crear_vacante"
 
-class CustomFieldDeleteView(generics.DestroyAPIView):
+class CustomFieldVacantPositionDeleteView(generics.DestroyAPIView):
     permission_classes = [IsAuthenticated, HasCustomPermission]
     required_permission = 'borrar_campo_dinamico'
     queryset = CustomFieldVacantPosition.objects.all()
