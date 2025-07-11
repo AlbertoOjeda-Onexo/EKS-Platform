@@ -7,6 +7,7 @@ TIPOS_CAMPO = (
     ("date", "Fecha"),
     ("boolean", "Booleano"),
     ("select", "Selección"),
+    ("file", "Archivo")
 )
 
 CANDIDATE_STATUS = (
@@ -52,6 +53,7 @@ class CustomFieldValueCandidate(models.Model):
     idCandidate = models.ForeignKey(Candidate, on_delete=models.CASCADE, related_name="valores_dinamicos")
     field = models.ForeignKey(CustomFieldCandidate, on_delete=models.CASCADE)
     value = models.TextField()
+    file = models.FileField(upload_to='uploads/candidates/', blank=True, null=True)
     fdl = models.SmallIntegerField(default=0)  
     cbu = models.IntegerField(null=True, blank=True) 
     cat = models.DateTimeField(auto_now_add=True)  

@@ -17,7 +17,7 @@ class CustomFieldValueSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomFieldValueCandidate
-        fields = ['field', 'fieldID', 'fieldName', 'value']
+        fields = ['field', 'fieldID', 'fieldName', 'value', 'file']
     
     def validate(self, data):
         field = data['field']
