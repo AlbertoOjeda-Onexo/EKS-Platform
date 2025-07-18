@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from Api.models.permission_model import HasCustomPermission
+from rest_framework.parsers import MultiPartParser, FormParser
 from ..models.vacant_position_model import VacantPosition, CustomFieldVacantPosition, CustomFieldValueVacantPosition
 from ..serializers.vacant_position_serializer import VacantPositionSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, VacantPositionDeleteSerializer
 
@@ -21,6 +22,7 @@ class CustomFieldVacantPositionListCreateView(generics.ListCreateAPIView):
 class VacantPositionListCreateView(generics.ListCreateAPIView):    
     queryset = VacantPosition.objects.filter(fdl=0)
     serializer_class = VacantPositionSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_permissions(self):
         if self.request.method == "POST":            

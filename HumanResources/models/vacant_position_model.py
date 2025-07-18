@@ -6,6 +6,7 @@ TIPOS_CAMPO = (
     ("date", "Fecha"),
     ("boolean", "Booleano"),
     ("select", "Selección"),
+    ("file", "Archivo")
 )
 
 VACANT_STATUS = (
@@ -51,6 +52,7 @@ class CustomFieldValueVacantPosition(models.Model):
     idVacantPosition = models.ForeignKey(VacantPosition, on_delete=models.CASCADE, related_name="valores_dinamicos")
     field = models.ForeignKey(CustomFieldVacantPosition, on_delete=models.CASCADE)
     value = models.TextField()
+    file = models.FileField(upload_to='uploads/vacant_position/', blank=True, null=True)
     fdl = models.SmallIntegerField(default=0)  
     cbu = models.IntegerField(null=True, blank=True) 
     cat = models.DateTimeField(auto_now_add=True)  
