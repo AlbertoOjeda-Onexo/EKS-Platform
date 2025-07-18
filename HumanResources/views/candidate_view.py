@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from Api.models.permission_model import HasCustomPermission
+from rest_framework.parsers import MultiPartParser, FormParser
 from ..models.candidate_model import Candidate, CustomFieldCandidate, CustomFieldValueCandidate
 from ..serializers.candidate_serializer import CandidateSerializer, CustomFieldSerializer, CustomFieldDeleteSerializer, CandidateDeleteSerializer
 
@@ -21,6 +22,7 @@ class CustomFieldCandidateListCreateView(generics.ListCreateAPIView):
 class CandidateListCreateView(generics.ListCreateAPIView):    
     queryset = Candidate.objects.filter(fdl=0)
     serializer_class = CandidateSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
     def get_permissions(self):
         if self.request.method == "POST":            
