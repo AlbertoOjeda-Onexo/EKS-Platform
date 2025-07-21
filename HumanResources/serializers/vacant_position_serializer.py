@@ -20,7 +20,7 @@ class CustomFieldValueSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = CustomFieldValueVacantPosition
-        fields = ['field', 'fieldID', 'fieldName', 'value']
+        fields = ['field', 'fieldID', 'fieldName', 'value', 'file']
     
     def validate(self, data):
         field = data['field']

@@ -4,6 +4,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from Api.views.user_view import LoginView, RegisterView, ChangePasswordView, ValidateTokenView
 from Api.views.permission_view import CustomPermissionListCreateView
 from Api.views.user_permission_view import UserPermissionView, UserPermissionRemoveView
+from Api.views.serve_file_view import serve_protected_media
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -18,4 +19,6 @@ urlpatterns = [
     path("permisos/", CustomPermissionListCreateView.as_view()), 
     path('<int:idUser>/permisos/', UserPermissionView.as_view()),
     path('<int:idUser>/permisos/<int:permiso_id>/', UserPermissionRemoveView.as_view()),
+    # Visualización Documento
+    path('view_file/<path:subpath>/', serve_protected_media, name='ver_archivo'),
 ]
