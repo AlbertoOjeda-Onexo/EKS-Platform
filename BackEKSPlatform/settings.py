@@ -69,7 +69,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'Api',
     'BackEKSPlatform',
-    'HumanResources'
+    'HumanResources',
+    'Training'
 ]
 
 MIDDLEWARE = [

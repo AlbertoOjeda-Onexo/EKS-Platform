@@ -9,19 +9,18 @@ TIPOS_CAMPO = (
     ("file", "Archivo")
 )
 
-VACANT_STATUS = (
+LESSON_STATUS = (
     ("pendiente", "Pendiente"),
     ("aprobada", "Aprobada"),
-    ("cerrada", "Cerrada")
+    ("archivada", "Archivada")
 )
 
-class VacantPosition(models.Model):
-    idVacantPosition = models.AutoField(primary_key=True)
+class Lesson(models.Model):
+    idLesson = models.AutoField(primary_key=True)    
     title = models.CharField(max_length=255)
-    description = models.TextField()
-    publish_date = models.DateTimeField(auto_now_add=True)
-    expire_date = models.DateField(null=True, blank=True)    
-    status = models.CharField(max_length=20, choices=VACANT_STATUS)
+    description = models.CharField(max_length=255)
+    duration = models.CharField(max_length=255)
+    status = models.CharField(max_length=20, choices=LESSON_STATUS)
     fdl = models.SmallIntegerField(default=0)  
     cbu = models.IntegerField(null=True, blank=True) 
     cat = models.DateTimeField(auto_now_add=True)  
@@ -31,7 +30,7 @@ class VacantPosition(models.Model):
     def __str__(self):
         return self.titulo
 
-class CustomFieldVacantPosition(models.Model):
+class CustomFieldLesson(models.Model):
     idCustomField = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
     label = models.CharField(max_length=255)
@@ -47,12 +46,12 @@ class CustomFieldVacantPosition(models.Model):
     def __str__(self):
         return self.label
 
-class CustomFieldValueVacantPosition(models.Model):
+class CustomFieldValueLesson(models.Model):
     idCustomFieldValue = models.AutoField(primary_key=True)
-    idVacantPosition = models.ForeignKey(VacantPosition, on_delete=models.CASCADE, related_name="valores_dinamicos")
-    field = models.ForeignKey(CustomFieldVacantPosition, on_delete=models.CASCADE)
+    idLesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name="valores_dinamicos")
+    field = models.ForeignKey(CustomFieldLesson, on_delete=models.CASCADE)
     value = models.TextField()
-    file = models.FileField(upload_to='vacant_position/', blank=True, null=True)
+    file = models.FileField(upload_to='lessons/', blank=True, null=True)
     fdl = models.SmallIntegerField(default=0)  
     cbu = models.IntegerField(null=True, blank=True) 
     cat = models.DateTimeField(auto_now_add=True)  
@@ -60,4 +59,4 @@ class CustomFieldValueVacantPosition(models.Model):
     uat = models.DateTimeField(auto_now=True, null=True)     
 
     def __str__(self):
-        return f"{self.vacante.title} - {self.campo.label}: {self.valor}"
+        return f"{self.clase.name} - {self.campo.label}: {self.valor}"
