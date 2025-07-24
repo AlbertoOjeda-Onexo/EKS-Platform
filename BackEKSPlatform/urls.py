@@ -17,9 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from Api.views.chatbot_assistant_view import ask_chatbot
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/user/', include('Api.urls')),
     path('api/humanResources/', include('HumanResources.urls')),
     path('api/training/', include('Training.urls')),
+
+    # Agentes de IA con OpenAI
+    path('api/chat/ask/', ask_chatbot, name='chat_bot'),    
+    # path('api/chat/file_scanner/', file_scanner.as_view(), name='openai_file_scanner'),
+    # path('api/chat/field_filler/', fields_filler.as_view(), name='openai_field_filler')
 ]
